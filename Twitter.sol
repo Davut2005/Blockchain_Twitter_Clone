@@ -27,6 +27,10 @@ contract Twitter {
     
     mapping(address => Tweet[] ) public tweets;
 
+    event TweetCreated(uint256 id, address author, uint256 timestamp, string content) ;
+    event TweetLiked (address liker, address tweetAuthor, uint256 tweetId, uint256 newLikeCount);
+    event TweetUnLiked (address unLiker, address tweetAuthor, uint256 tweetId, uint256 newLikeCount);
+
     function createTweet ( string memory _tweet ) public {
         require(bytes(_tweet).length <= max_length_tweet, "The tweet is too long");
 
@@ -39,6 +43,8 @@ contract Twitter {
         } );
 
         tweets[msg.sender].push(newTweet);
+
+        emit TweetCreated(newTweet.id, newTweet.author, newTweet.timestamp, newTweet.content);
     }
 
    modifier hasLikes (uint256 id, address author) {
@@ -62,12 +68,16 @@ contract Twitter {
         require(id > 0 && tweets[author].length > id, "That tweet is unavialable");  
 
         tweets[author][id].likes++ ;
+
+        emit TweetLiked(msg.sender, author, id, tweets[author][id].likes);
     }
 
     function unLikeTweet (uint256 id, address author) external hasLikes(id, author) {
         require(id > 0 && tweets[author].length > id, "That tweet is unavialable"); 
         
         tweets[author][id].likes-- ;
+
+        emit TweetUnLiked(msg.sender, author, id, tweets[author][id].likes);
     }
 
 }
