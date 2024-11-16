@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useContract } from "../hooks/useContract";
 
 const ConnectedAccounts = () => {
 
