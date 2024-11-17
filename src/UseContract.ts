@@ -1,32 +1,24 @@
-// src/hooks/useContract.ts
-import { useEffect, useState } from "react";
-import { ethers } from "ethers";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../contractConfig";
+import { ethers } from 'ethers';
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '../contractConfig';
+import { useState } from 'react';
 
-export const useContract = () => {
-  const [contract, setContract] = useState<ethers.Contract | null>(null);
-  const [signer, setSigner] = useState<ethers.Signer | null>(null);
-  const arra = []
+export async function useContract() {
 
-  useEffect(() => {
-    const initContract = async () => {
-      if (typeof window.ethereum !== "undefined") {
-        // Request account access if needed
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+  const [signer, setSigner] = useState<ethers.JsonRpcSigner>();
+  const [contract, setContract] = useState<ethers.Contract>();
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+  if (typeof window.ethereum !== 'undefined') {
 
-        setSigner(signer);
-        setContract(contractInstance);
-      } else {
-        console.error("Ethereum wallet is not connected");
-      }
-    };
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-    initContract();
-  }, []);
+    setSigner(signer);
+    setContract(contractInstance);
+  } else {
+    alert('MetaMask is not installed!');
+  };
 
-  return { contract, signer };
-};
+  return {contract, signer};
+}
