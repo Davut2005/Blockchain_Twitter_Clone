@@ -8,8 +8,7 @@ export async function useContract() {
   const [contract, setContract] = useState<ethers.Contract>();
 
   if (typeof window.ethereum !== 'undefined') {
-
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
+      
     const provider = new ethers.BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const contractInstance = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);

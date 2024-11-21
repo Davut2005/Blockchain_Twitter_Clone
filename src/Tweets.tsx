@@ -31,7 +31,7 @@ const Tweets = () => {
     event.preventDefault();
     console.log('Input Value:', inputValue);
     if (contract) 
-      contract.createTweet('helloooo');
+      contract.createTweet(inputValue);
     setInputValue('');
   };
 
