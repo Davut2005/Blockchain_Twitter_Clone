@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
-import { useContract } from './UseContract'
+import { useEffect, useState } from 'react';
+import { useContract } from './UseContract';
 import { ethers } from 'ethers';
+import { CONTRACT_ABI } from '../contractConfig';
+import { Tweet } from './types/Tweet';
 
 const Tweets = () => {
 
@@ -12,14 +14,16 @@ const Tweets = () => {
 
   useEffect( () => {
     async function gettingContract () {
-      const {contract , signer} = await useContract(); 
+      const { contract , signer} = await useContract(); 
       setContract(contract);
       setSigner(signer);
     };
 
     if ( contract ) {
-      const newTweets = contract.getTweets();
-      setTweets(newTweets)
+
+      const newTweets = contract.getTweets() ;
+
+      setTweets( newTweets );
     }
   }, [tweets] );
 
@@ -57,7 +61,14 @@ const Tweets = () => {
             </button>
           </form>
         </div>
-          <div className='tweet my-1 border-2 border-gray-700 rounded-lg mx-3 h-auto w-auto'>sdfhgs</div>
+        <div>
+          { tweets?.map( (tweet: Tweet) => 
+            <div 
+              className='tweet my-1 border-2 border-gray-700 rounded-lg mx-3 h-auto w-auto'>
+                {tweet.content}
+            </div>
+          ) }
+        </div>  
       </div>
     </>
   )
