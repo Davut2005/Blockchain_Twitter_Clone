@@ -24,8 +24,9 @@ const Tweets = () => {
       const newTweets = contract.getTweets() ;
 
       setTweets( newTweets );
+      console.log(tweets)
     }
-  }, [tweets] );
+  }, [] );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -62,12 +63,7 @@ const Tweets = () => {
           </form>
         </div>
         <div>
-          { tweets?.map( (tweet: Tweet) => 
-            <div 
-              className='tweet my-1 border-2 border-gray-700 rounded-lg mx-3 h-auto w-auto'>
-                {tweet.content}
-            </div>
-          ) }
+
         </div>  
       </div>
     </>
@@ -75,3 +71,10 @@ const Tweets = () => {
 }
 
 export default Tweets;
+
+          /*{ ( (tweet: Tweet) => 
+            <div 
+              className='tweet my-1 border-2 border-gray-700 rounded-lg mx-3 h-auto w-auto'>
+                {tweet.content}
+            </div>
+          ) } */
